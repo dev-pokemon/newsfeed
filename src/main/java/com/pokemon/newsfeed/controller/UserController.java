@@ -2,13 +2,17 @@ package com.pokemon.newsfeed.controller;
 
 import com.pokemon.newsfeed.dto.requestDto.LoginRequestDto;
 import com.pokemon.newsfeed.dto.requestDto.SignupRequestDto;
+import com.pokemon.newsfeed.dto.responseDto.BoardResponseDto;
 import com.pokemon.newsfeed.dto.responseDto.LoginResponseDto;
 import com.pokemon.newsfeed.security.UserDetailsImpl;
 import com.pokemon.newsfeed.dto.responseDto.ProfileResponseDto;
+import com.pokemon.newsfeed.service.BoardService;
 import com.pokemon.newsfeed.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -23,6 +27,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final BoardService boardService;
 
     @PostMapping("/signup")
     public String signup (@Valid @RequestBody SignupRequestDto requestDto, BindingResult bindingResult) {
@@ -65,5 +70,17 @@ public class UserController {
     public ProfileResponseDto getProfile (@PathVariable Long num) {
 
         return userService.getProfile(num);
+    }
+
+    @GetMapping("/{num}/boards")
+    public ResponseEntity<List<BoardResponseDto>> getAllUserBoards(Long userId) {
+        List<BoardResponseDto> userBoards = boardService.getAllUserBoards(userId);
+        return new ResponseEntity<>(userBoards, HttpStatus.OK);
+    }
+
+    @GetMapping("/{num}/boards/{seq}")
+    public ResponseEntity<List<BoardResponseDto>> getSelectedUserBoards(@PathVariable Long num) {
+        List<BoardResponseDto> selectedUserBoards = boardService.getSelectedUserBoards(num);
+        return new ResponseEntity<>(selectedUserBoards, HttpStatus.OK);
     }
 }
