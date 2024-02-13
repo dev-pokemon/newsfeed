@@ -3,6 +3,7 @@ package com.pokemon.newsfeed.controller;
 import com.pokemon.newsfeed.dto.requestDto.LoginRequestDto;
 import com.pokemon.newsfeed.dto.requestDto.SignupRequestDto;
 import com.pokemon.newsfeed.dto.responseDto.BoardResponseDto;
+import com.pokemon.newsfeed.dto.requestDto.UserUpdateDto;
 import com.pokemon.newsfeed.dto.responseDto.LoginResponseDto;
 import com.pokemon.newsfeed.security.UserDetailsImpl;
 import com.pokemon.newsfeed.dto.responseDto.ProfileResponseDto;
@@ -54,7 +55,7 @@ public class UserController {
         return responseDto;
     }
 
-    // 회원 관련 정보 받기
+    // 회원 관련 정보 받기 + 강의에서 봤던 이름님 환영합니다 부분 연결 api
     @GetMapping("/info")
     @ResponseBody
     public String getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -66,10 +67,17 @@ public class UserController {
     }
 
     // 프로필 단건조회
-    @GetMapping("/{num}")
-    public ProfileResponseDto getProfile (@PathVariable Long num) {
+    @GetMapping
+    public ResponseEntity<ProfileResponseDto> getProfile(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        ProfileResponseDto response = userService.getProfile(userDetails.getUser().getUserNum());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
-        return userService.getProfile(num);
+    // 프로필 수정
+    @PutMapping
+    public ResponseEntity<ProfileResponseDto> updateProfile(@RequestBody UserUpdateDto request, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        ProfileResponseDto response = userService.updateProfile(userDetails.getUser().getUserNum(), request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     //  자신이 작성한 모든 게시글 조회 요청 처리

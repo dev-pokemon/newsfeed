@@ -60,7 +60,7 @@ public class BoardService {
         return board;
     }
 
-    public void deleteBoard(Long boardnum, BoardDeleteDto requestDto, User user) {
+    public void deleteBoard(Long boardnum, User user) {
         Board board = findOne(boardnum);
 
         if (!board.getUser().equals(user)) {

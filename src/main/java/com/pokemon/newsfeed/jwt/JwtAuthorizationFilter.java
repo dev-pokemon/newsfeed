@@ -33,13 +33,16 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
         String tokenValue = jwtUtil.getJwtFromHeader(req);
+//        tokenValue은 순수한 토큰 받아옴
 
         if (StringUtils.hasText(tokenValue)) {
             log.info(tokenValue);
             if (!jwtUtil.validateToken(tokenValue)) {
+//                토큰에 있는 예외처리 메서드로 순수 토큰을 보내서 검사
                 log.error("Token Error");
                 return;
             }
+//            여기도 받아온 순수한 토큰 잘못된게 있는지 검사
 
             Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
 

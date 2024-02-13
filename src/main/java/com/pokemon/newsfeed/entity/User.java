@@ -39,4 +39,10 @@ public class User extends Timestamped {
         if (!(o instanceof User user)) return false;
         return Objects.equals(getUserNum(), user.getUserNum()) && Objects.equals(getUserId(), user.getUserId());
     }
+
+    public void updateProfile(String name, String userId, String email) {
+        this.name = name;
+        this.userId = userId;
+        this.email = email;
+    }
 }

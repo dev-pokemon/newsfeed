@@ -1,6 +1,7 @@
 package com.pokemon.newsfeed.util;
 
 import com.pokemon.newsfeed.entity.UserRoleEnum;
+import com.pokemon.newsfeed.jwt.JwtAuthorizationFilter;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -62,9 +63,15 @@ public class JwtUtil {
 
     // header에서 JWT 가져오기
     public String getJwtFromHeader (HttpServletRequest req) {
+//        JwtAuthorizationFilter에서 HttpServletRequest를 받아옴
         String bearerToken = req.getHeader(AUTHORIZATION_HEADER);
+//        HttpServletRequest 여기에 있는 getHeader 메서드를 이용하여 AUTHORIZATION_HEADER 이 값으로 되어 있는 JWT 토큰을 가져옴
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+//            가져온 토큰 null인지 아닌지 문자열이 공백이 있는지와 bearer이걸로 시작하는지 확인
             return bearerToken.substring(7);
+//            bearerToken을 순수한 토큰으로 뽑아내기 위해
+            //todo: 공백 없이 substring으로 잘못 잘랐는데 잘 작동함
+
         }
         return null;
     }

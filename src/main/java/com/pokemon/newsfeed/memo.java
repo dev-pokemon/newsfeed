@@ -9,6 +9,7 @@ public class memo {
     todo: 필요없는 import 삭제하지 않고 git에 올려서 conflict 발생 필요없는 import 확인 후 push
 
     todo: 로그인 기능 구현 및 토큰 발급 후 로그인 정보 반환 받기 확인
+    todo: log와 sout 차이
 
 
      */

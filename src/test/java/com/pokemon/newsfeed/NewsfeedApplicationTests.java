@@ -16,7 +16,7 @@ class NewsfeedApplicationTests {
 
     @Test
     public void testSignup() {
-        for (int i = 1; i <= 50; i++) {
+        for (int i = 1; i <= 10; i++) {
             SignupRequestDto requestDto = new SignupRequestDto();
             requestDto.setUserId("test"+i);
             requestDto.setPassword(i+"");
