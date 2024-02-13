@@ -18,23 +18,23 @@ import org.springframework.web.bind.annotation.*;
 public class BoardController {
     private final BoardService boardService;
 
-    @PutMapping("/{boardnum}")
+    @PutMapping("/{boardNum}")
     public ResponseEntity<BoardResponseDto> updateBoard(
-            @PathVariable Long boardnum,
+            @PathVariable Long boardNum,
             @RequestBody BoardUpdateDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        Board board = boardService.updateBoard(boardnum, requestDto, userDetails.getUser());
+        Board board = boardService.updateBoard(boardNum, requestDto, userDetails.getUser());
         BoardResponseDto boardResponseDto = new BoardResponseDto(board);
 
         return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{boardnum}")
+    @DeleteMapping("/{boardNum}")
     public ResponseEntity<String> deleteBoard(
-            @PathVariable Long boardnum,
+            @PathVariable Long boardNum,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
-        boardService.deleteBoard(boardnum, userDetails.getUser());
-        return ResponseEntity.ok("삭제 완료");
+        boardService.deleteBoard(boardNum, userDetails.getUser());
+        return ResponseEntity.ok("게시글 삭제 완료");
     }
 }
