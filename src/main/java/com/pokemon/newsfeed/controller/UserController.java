@@ -72,15 +72,21 @@ public class UserController {
         return userService.getProfile(num);
     }
 
-    @GetMapping("/{num}/boards")
-    public ResponseEntity<List<BoardResponseDto>> getAllUserBoards(Long userId) {
-        List<BoardResponseDto> userBoards = boardService.getAllUserBoards(userId);
+    //  자신이 작성한 모든 게시글 조회 요청 처리
+    @GetMapping
+    public ResponseEntity<List<BoardResponseDto>> getAllUserBoards(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        List<BoardResponseDto> userBoards = userService.getAllUserBoards(userDetails);
         return new ResponseEntity<>(userBoards, HttpStatus.OK);
     }
 
-    @GetMapping("/{num}/boards/{seq}")
-    public ResponseEntity<List<BoardResponseDto>> getSelectedUserBoards(@PathVariable Long num) {
-        List<BoardResponseDto> selectedUserBoards = boardService.getSelectedUserBoards(num);
+    // 자신이 선택한 게시글 조회 요청 처리
+    @GetMapping("/boards/{boardnum}")
+    public ResponseEntity<List<BoardResponseDto>> getSelectedUserBoards(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        List<BoardResponseDto> selectedUserBoards = userService.getSelectedUserBoards(userDetails);
         return new ResponseEntity<>(selectedUserBoards, HttpStatus.OK);
     }
 }

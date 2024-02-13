@@ -2,12 +2,15 @@ package com.pokemon.newsfeed.service;
 
 import com.pokemon.newsfeed.dto.requestDto.LoginRequestDto;
 import com.pokemon.newsfeed.dto.requestDto.SignupRequestDto;
+import com.pokemon.newsfeed.dto.responseDto.BoardResponseDto;
 import com.pokemon.newsfeed.dto.responseDto.LoginResponseDto;
 import com.pokemon.newsfeed.dto.responseDto.ProfileResponseDto;
 import com.pokemon.newsfeed.dto.responseDto.UserResponseDto;
+import com.pokemon.newsfeed.entity.Board;
 import com.pokemon.newsfeed.entity.User;
 import com.pokemon.newsfeed.entity.UserRoleEnum;
 import com.pokemon.newsfeed.repository.UserRepository;
+import com.pokemon.newsfeed.security.UserDetailsImpl;
 import com.pokemon.newsfeed.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -75,5 +78,29 @@ public class UserService {
             return new ProfileResponseDto(user.getName(), user.getUserId(), user.getEmail());
     }
 
+    // 자신 게시물 전체 조회
+    public List<BoardResponseDto> getAllUserBoards(UserDetailsImpl userDetails) {
+        User user = userRepository.findById(userDetails.getUser().getUserNum())
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userDetails.getUser().getUserNum()));
+
+        return null;
+
+//
+//        return userRepository.findByUser(user);
+    }
+
+    // 자신 게시문 선택 조회
+    public List<BoardResponseDto> getSelectedUserBoards(UserDetailsImpl userDetails) {
+        // 예시로 userRepository를 사용하여 사용자가 선택한 게시물을 조회하는 것으로 가정
+        User user = userRepository.findById(userDetails.getUser().getUserNum())
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userDetails.getUser().getUserNum()));
+
+        return null;
+
+
+//        user.
+//
+//        return userRepository.findByUser(user);
+    }
 
 }
