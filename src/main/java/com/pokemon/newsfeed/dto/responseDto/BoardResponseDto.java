@@ -27,4 +27,5 @@ public class BoardResponseDto {
         this.modifiedAt = board.getModifiedAt();
 
     }
+
 }

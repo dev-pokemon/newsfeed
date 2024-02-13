@@ -8,13 +8,12 @@ import com.pokemon.newsfeed.entity.Board;
 import com.pokemon.newsfeed.entity.User;
 import com.pokemon.newsfeed.repository.BoardRepository;
 import com.pokemon.newsfeed.repository.UserRepository;
+import com.pokemon.newsfeed.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,51 +23,31 @@ public class BoardService {
     private final UserRepository userRepository;
     private Board board;
 
-    //    userRepository.findById(userId)에서 발생한 IllegalArgumentException이 원인으로 보입니다.
+    //    userRepository.findById(userId)에서 발생한 IllegalArgumentException이 원인(?)
     //    해당 부분을 확인하고 유저 ID가 유효한지, 즉 null이 아닌지 확인
 
-    public BoardResponseDto createBoard(Long userId, BoardRequestDto requestDto) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+    public Board createBoard(BoardRequestDto requestDto, User user) {
+        String title = requestDto.getTitle();
+        String contents = requestDto.getContents();
+        Board board = new Board(title, contents, user);
+        boardRepository.save(board);
 
-        Board savedBoard = boardRepository.save(board);
-
-        return null;
-//        return new BoardResponseDto(savedBoard.getBoardSeq(), savedBoard.getTitle(), savedBoard.getContent(),
-//                savedBoard.getCreatedAt(), savedBoard.getModifiedAt());
+        return board;
     }
 
     public List<Board> getAllBoards() {
-        List<Board> boards = boardRepository.findAll();
-        return null;
-//        return boards.stream()
-//                .map(board -> new BoardResponseDto(board.getBoardSeq(), board.getTitle(), board.getContent(),
-//                        board.getCreatedAt(), board.getModifiedAt()))
-//                .collect(Collectors.toList());
+        // 저장소에서 모든 게시물을 찾습니다.
+        return boardRepository.findAll();
+
     }
 
-    public Board getBoardById(Long boardId) {
-        Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new IllegalArgumentException("Board not found with id: " + boardId));
-        return null;
-//        return new BoardResponseDto(board.getBoardSeq(), board.getTitle(), board.getContent(),
-//                board.getCreatedAt(), board.getModifiedAt());
-    }
+    public Board getBoardById(Long boardNum) {
+        // ID로 게시물을 찾습니다.
+        Board board = boardRepository.findById(boardNum)
+                .orElseThrow(() -> new IllegalArgumentException("ID에 해당하는 게시물을 찾을 수 없습니다: " + boardNum));
 
-    public List<BoardResponseDto> getAllUserBoards(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
-        List<Board> userBoards = boardRepository.findByUser(user);
-        return null;
-//        return userBoards.stream()
-//                .map(board -> new BoardResponseDto(board.getBoardSeq(), board.getTitle(), board.getContent(),
-//                        board.getCreatedAt(), board.getModifiedAt()))
-//                .collect(Collectors.toList());
-    }
+        return boardRepository.findById(boardNum).orElseThrow(() -> new IllegalArgumentException("없는 게시글 입니다."));
 
-    public List<BoardResponseDto> getSelectedUserBoards(Long userId) {
-        return null;
-        // 이 부분은 특정 사용자가 선택한 게시물을 조회하는 로직을 작성
     }
 
     @Transactional
@@ -94,5 +73,4 @@ public class BoardService {
     private Board findOne(Long boardNum) {
         return boardRepository.findById(boardNum).orElseThrow(() -> new IllegalArgumentException("없는 게시글 입니다."));
     }
-
 }
