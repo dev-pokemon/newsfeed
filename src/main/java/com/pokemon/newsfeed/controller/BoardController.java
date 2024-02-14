@@ -55,6 +55,14 @@ public class BoardController {
 
     }
 
+    //  자신이 작성한 모든 게시물 조회 요청 처리
+    @GetMapping("/userboard")
+    public List<BoardResponseDto> getUserAllBoards(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ){
+        return boardService.getUserAllBoards(userDetails);
+    }
+
     @PutMapping("/{boardNum}")
     public ResponseEntity<BoardResponseDto> updateBoard(
             @PathVariable Long boardNum,

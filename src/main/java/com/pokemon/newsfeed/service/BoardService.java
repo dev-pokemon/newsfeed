@@ -24,6 +24,7 @@ import java.util.Objects;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
 
     public Board createBoard(BoardRequestDto requestDto, User user) {
         String title = requestDto.getTitle();
@@ -45,6 +46,14 @@ public class BoardService {
 
         return boardRepository.findById(boardNum).orElseThrow(() -> new IllegalArgumentException("없는 게시글 입니다."));
 
+    }
+
+    // 자신 게시물 전체 조회(마이페이지)
+    public List<BoardResponseDto> getUserAllBoards(UserDetailsImpl userDetails) {
+        User user = userRepository.findByUserId(userDetails.getUsername())
+                .orElseThrow(() -> new IllegalArgumentException("존재하는 회원이 없습니다."));
+        return boardRepository.findAllByUser(user)
+                .stream().map(BoardResponseDto::new).toList();
     }
 
     @Transactional
