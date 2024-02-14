@@ -48,9 +48,10 @@ public class JwtUtil {
 
     // 토큰 생성
     public String createToken (String userId, UserRoleEnum role) {
+        // 토큰 생성을 위한 메서드
         Date date = new Date();
 
-        return BEARER_PREFIX +
+        return BEARER_PREFIX + // bearer로 시작할 수 있게 하고
                 Jwts.builder()
                         .setSubject(userId) // 사용자 식별 (id)
                         .claim(AUTHORIZATION_KEY, role) // 사용자 권한 확인할 때 사용
@@ -65,7 +66,8 @@ public class JwtUtil {
     public String getJwtFromHeader (HttpServletRequest req) {
 //        JwtAuthorizationFilter에서 HttpServletRequest를 받아옴
         String bearerToken = req.getHeader(AUTHORIZATION_HEADER);
-//        HttpServletRequest 여기에 있는 getHeader 메서드를 이용하여 AUTHORIZATION_HEADER 이 값으로 되어 있는 JWT 토큰을 가져옴
+//        HttpServletRequest 여기에 있는 getHeader 메서드를 이용하여
+//        AUTHORIZATION_HEADER 이 값으로 되어 있는 JWT 토큰을 가져옴
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
 //            가져온 토큰 null인지 아닌지 문자열이 공백이 있는지와 bearer이걸로 시작하는지 확인
             return bearerToken.substring(7);
