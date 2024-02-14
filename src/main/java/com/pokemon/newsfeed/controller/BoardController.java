@@ -43,6 +43,18 @@ public class BoardController {
         return new ResponseEntity<>(boards, HttpStatus.OK);
     }
 
+    // 특정 게시물 조회 요청 처리
+    @GetMapping("/{boardnum}")
+    public ResponseEntity<BoardResponseDto> getBoardById(
+            @PathVariable Long boardnum
+    ) {
+        Board board = boardService.getBoardById(boardnum);
+        BoardResponseDto boardResponseDto = new BoardResponseDto(board);
+        // 만약 조회된 게시물이 존재한다면 HttpStatus.OK 상태로 반환
+        return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
+
+    }
+
     @PutMapping("/{boardNum}")
     public ResponseEntity<BoardResponseDto> updateBoard(
             @PathVariable Long boardNum,

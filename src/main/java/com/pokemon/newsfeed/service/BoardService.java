@@ -9,8 +9,12 @@ import com.pokemon.newsfeed.repository.BoardRepository;
 import com.pokemon.newsfeed.repository.UserRepository;
 import com.pokemon.newsfeed.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Objects;
@@ -33,6 +37,14 @@ public class BoardService {
     public List<Board> getAllBoards() {
         // 저장소에서 모든 게시물을 찾습니다.
         return boardRepository.findAll();
+    }
+
+    public Board getBoardById(Long boardNum) {
+        Board board = boardRepository.findById(boardNum)
+                .orElseThrow(() -> new IllegalArgumentException("ID에 해당하는 게시물을 찾을 수 없습니다: " + boardNum));
+
+        return boardRepository.findById(boardNum).orElseThrow(() -> new IllegalArgumentException("없는 게시글 입니다."));
+
     }
 
     @Transactional
