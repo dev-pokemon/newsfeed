@@ -3,6 +3,7 @@ package com.pokemon.newsfeed.controller;
 import com.pokemon.newsfeed.dto.requestDto.LoginRequestDto;
 import com.pokemon.newsfeed.dto.requestDto.SignupRequestDto;
 import com.pokemon.newsfeed.dto.requestDto.UserUpdateDto;
+import com.pokemon.newsfeed.dto.responseDto.BoardResponseDto;
 import com.pokemon.newsfeed.dto.responseDto.LoginResponseDto;
 import com.pokemon.newsfeed.security.UserDetailsImpl;
 import com.pokemon.newsfeed.dto.responseDto.ProfileResponseDto;
@@ -76,4 +77,23 @@ public class UserController {
         ProfileResponseDto response = userService.updateProfile(userDetails.getUser().getUserNum(), request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    //  자신이 작성한 모든 게시물 조회 요청 처리
+    @GetMapping("/userboard")
+    public List<BoardResponseDto> getUserAllBoards(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ){
+        return userService.getUserAllBoards(userDetails);
+    }
+
+    // 자신이 선택한 게시물 조회 요청 처리
+    @GetMapping("/boards/{boardnum}")
+    public BoardResponseDto getUserSelectedBoards(
+            @PathVariable Long boardnum,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        return userService.getUserSelectedBoards(boardnum, userDetails);
+
+    }
+
 }
