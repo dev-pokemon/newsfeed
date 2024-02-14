@@ -83,6 +83,16 @@ public class UserService {
         return responseDto;
     }
 
+    // 회원 탈퇴
+    public void deleteUser(Long userNum, User user) {
+        userRepository.findById(userNum).orElseThrow(() -> new IllegalArgumentException(" 계정 정보가 일치하지 않습니다."));
+        if (!user.getUserNum().equals(userNum)) {
+            throw new RuntimeException("패스워드가 일치하지 않습니다.");
+        }
+        userRepository.delete(user);
+
+    }
+
     // 프로필 조회
     public ProfileResponseDto getProfile(Long userNum) {
             User user = userRepository.findById(userNum).orElseThrow(() -> new IllegalArgumentException("해당 아이디는 존재하지 않습니다."));
@@ -103,4 +113,5 @@ public class UserService {
         user.updateProfile(request.getName(), request.getUserId(), request.getEmail());
         return new ProfileResponseDto(user.getName(), user.getUserId(), user.getEmail());
     }
+
 }

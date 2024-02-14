@@ -66,6 +66,13 @@ public class UserController {
         // 추후에 필요하지 않을까 생각이 듦
     }
 
+    // 회원탈퇴
+    @DeleteMapping("/{usernum}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long userNum, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        userService.deleteUser(userNum, userDetails.getUser());
+        return ResponseEntity.ok("회원이 탈퇴되었습니다.");
+    }
+
     // 프로필 단건조회
     @GetMapping
     public ResponseEntity<ProfileResponseDto> getProfile(@AuthenticationPrincipal UserDetailsImpl userDetails) {
