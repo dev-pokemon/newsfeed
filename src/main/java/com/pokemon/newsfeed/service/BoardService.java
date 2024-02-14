@@ -56,6 +56,16 @@ public class BoardService {
                 .stream().map(BoardResponseDto::new).toList();
     }
 
+    // 자신 게시물 선택 조회
+    public BoardResponseDto getUserSelectedBoards(Long boardnum, UserDetailsImpl userDetails) {
+        Board board = boardRepository.findById(boardnum)
+                .orElseThrow(() -> new IllegalArgumentException("존재하는 게시물이 없습니다."));
+        if (!Objects.equals(userDetails.getUser().getUserNum(), board.getUser().getUserNum())) {
+            throw new IllegalArgumentException("로그인 정보와 다른 게시물을 선택하였습니다.");
+        }
+        return new BoardResponseDto(board);
+    }
+
     @Transactional
     public Board updateBoard(Long boardNum, BoardUpdateDto requestDto, User user) {
         Board board = findOne(boardNum);

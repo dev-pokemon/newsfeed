@@ -63,6 +63,16 @@ public class BoardController {
         return boardService.getUserAllBoards(userDetails);
     }
 
+    // 자신이 선택한 게시물 조회 요청 처리
+    @GetMapping("/boards/{boardnum}")
+    public BoardResponseDto getUserSelectedBoards(
+            @PathVariable Long boardnum,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        return boardService.getUserSelectedBoards(boardnum, userDetails);
+
+    }
+
     @PutMapping("/{boardNum}")
     public ResponseEntity<BoardResponseDto> updateBoard(
             @PathVariable Long boardNum,
