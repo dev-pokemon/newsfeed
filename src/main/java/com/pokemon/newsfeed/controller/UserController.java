@@ -3,7 +3,6 @@ package com.pokemon.newsfeed.controller;
 import com.pokemon.newsfeed.dto.requestDto.LoginRequestDto;
 import com.pokemon.newsfeed.dto.requestDto.SignupRequestDto;
 import com.pokemon.newsfeed.dto.requestDto.UserUpdateDto;
-import com.pokemon.newsfeed.dto.responseDto.BoardResponseDto;
 import com.pokemon.newsfeed.dto.responseDto.LoginResponseDto;
 import com.pokemon.newsfeed.dto.responseDto.ProfileResponseDto;
 import com.pokemon.newsfeed.security.UserDetailsImpl;
