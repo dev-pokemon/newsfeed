@@ -1,5 +1,5 @@
 package com.pokemon.newsfeed.controller;
-
+// ...
 import com.pokemon.newsfeed.dto.requestDto.BoardUpdateDto;
 import com.pokemon.newsfeed.dto.responseDto.BoardResponseDto;
 import com.pokemon.newsfeed.entity.Board;
