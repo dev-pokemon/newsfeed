@@ -30,6 +30,11 @@ public class BoardService {
         return board;
     }
 
+    public List<Board> getAllBoards() {
+        // 저장소에서 모든 게시물을 찾습니다.
+        return boardRepository.findAll();
+    }
+
     @Transactional
     public Board updateBoard(Long boardNum, BoardUpdateDto requestDto, User user) {
         Board board = findOne(boardNum);
