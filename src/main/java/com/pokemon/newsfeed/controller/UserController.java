@@ -86,7 +86,7 @@ public class UserController {
         return userService.getUserAllBoards(userDetails);
     }
 
-    // 자신이 선택한 게시물 조회 요청 처리
+    // 자신이 선택한 게시물 조회 요청 처리 + git 확인
     @GetMapping("/boards/{boardnum}")
     public BoardResponseDto getUserSelectedBoards(
             @PathVariable Long boardnum,
