@@ -21,6 +21,15 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
 
+    public Board createBoard(BoardRequestDto requestDto, User user) {
+        String title = requestDto.getTitle();
+        String contents = requestDto.getContents();
+        Board board = new Board(title, contents, user);
+        boardRepository.save(board);
+
+        return board;
+    }
+
     @Transactional
     public Board updateBoard(Long boardNum, BoardUpdateDto requestDto, User user) {
         Board board = findOne(boardNum);
@@ -44,4 +53,6 @@ public class BoardService {
     private Board findOne(Long boardNum) {
         return boardRepository.findById(boardNum).orElseThrow(() -> new IllegalArgumentException("없는 게시글 입니다."));
     }
+
+
 }
