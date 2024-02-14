@@ -9,8 +9,12 @@ import com.pokemon.newsfeed.repository.BoardRepository;
 import com.pokemon.newsfeed.repository.UserRepository;
 import com.pokemon.newsfeed.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Objects;
@@ -20,6 +24,7 @@ import java.util.Objects;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
 
     public Board createBoard(BoardRequestDto requestDto, User user) {
         String title = requestDto.getTitle();
@@ -28,6 +33,37 @@ public class BoardService {
         boardRepository.save(board);
 
         return board;
+    }
+
+    public List<Board> getAllBoards() {
+        // 저장소에서 모든 게시물을 찾습니다.
+        return boardRepository.findAll();
+    }
+
+    public Board getBoardById(Long boardNum) {
+        Board board = boardRepository.findById(boardNum)
+                .orElseThrow(() -> new IllegalArgumentException("ID에 해당하는 게시물을 찾을 수 없습니다: " + boardNum));
+
+        return boardRepository.findById(boardNum).orElseThrow(() -> new IllegalArgumentException("없는 게시글 입니다."));
+
+    }
+
+    // 자신 게시물 전체 조회(마이페이지)
+    public List<BoardResponseDto> getUserAllBoards(UserDetailsImpl userDetails) {
+        User user = userRepository.findByUserId(userDetails.getUsername())
+                .orElseThrow(() -> new IllegalArgumentException("존재하는 회원이 없습니다."));
+        return boardRepository.findAllByUser(user)
+                .stream().map(BoardResponseDto::new).toList();
+    }
+
+    // 자신 게시물 선택 조회
+    public BoardResponseDto getUserSelectedBoards(Long boardnum, UserDetailsImpl userDetails) {
+        Board board = boardRepository.findById(boardnum)
+                .orElseThrow(() -> new IllegalArgumentException("존재하는 게시물이 없습니다."));
+        if (!Objects.equals(userDetails.getUser().getUserNum(), board.getUser().getUserNum())) {
+            throw new IllegalArgumentException("로그인 정보와 다른 게시물을 선택하였습니다.");
+        }
+        return new BoardResponseDto(board);
     }
 
     @Transactional
