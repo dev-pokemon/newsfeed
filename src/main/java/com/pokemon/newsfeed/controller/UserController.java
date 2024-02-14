@@ -30,7 +30,7 @@ public class UserController {
 
     @PostMapping("/signup")
     public String signup (@Valid @RequestBody SignupRequestDto requestDto, BindingResult bindingResult) {
-        // todo: RequestBody 어노테이션 없으면 null이 들어오는 이유// Validation 예외처리
+        // TODO: RequestBody 어노테이션 없으면 null이 들어오는 이유// Validation 예외처리
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
         if (!fieldErrors.isEmpty()) {
             for (FieldError fieldError : bindingResult.getFieldErrors()) {
@@ -49,6 +49,7 @@ public class UserController {
     @PostMapping("/login")
     public LoginResponseDto login (@RequestBody LoginRequestDto requestDto) {
         LoginResponseDto responseDto = userService.login(requestDto);
+
         return responseDto;
         /*
         유저 id와 비밀번호를 파라미터로 받아서 서비스의 login 메서드로 넘겨줍니다.
@@ -62,7 +63,8 @@ public class UserController {
     public UserDetailsImpl getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         return userDetails;
-        // todo: 이 부분 필요할까....
+        // TODO: 이 부분 필요할까....
+        // 추후에 필요하지 않을까 생각이 듦
     }
 
     // 프로필 단건조회
@@ -76,6 +78,7 @@ public class UserController {
     @PutMapping
     public ResponseEntity<ProfileResponseDto> updateProfile(@RequestBody UserUpdateDto request, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         ProfileResponseDto response = userService.updateProfile(userDetails.getUser().getUserNum(), request);
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
