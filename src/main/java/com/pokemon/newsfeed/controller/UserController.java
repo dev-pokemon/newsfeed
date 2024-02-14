@@ -69,7 +69,7 @@ public class UserController {
     @DeleteMapping("/{usernum}")
     public ResponseEntity<String> deleteUser(@PathVariable Long userNum, @AuthenticationPrincipal UserDetailsImpl userDetails){
         userService.deleteUser(userNum, userDetails.getUser());
-        return ResponseEntity.ok("회원이 탈퇴되었습니다.");
+        return ResponseEntity.ok("회원 탈퇴 완료.");
     }
 
     // 프로필 단건조회
