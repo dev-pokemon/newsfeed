@@ -1,5 +1,6 @@
 package com.pokemon.newsfeed.controller;
 // ...
+import com.pokemon.newsfeed.dto.requestDto.BoardRequestDto;
 import com.pokemon.newsfeed.dto.requestDto.BoardUpdateDto;
 import com.pokemon.newsfeed.dto.responseDto.BoardResponseDto;
 import com.pokemon.newsfeed.entity.Board;
@@ -16,6 +17,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/boards")
 public class BoardController {
     private final BoardService boardService;
+
+    // 게시물 생성 요청 처리
+    @PostMapping
+    public ResponseEntity<BoardResponseDto> createBoard(
+            @RequestBody BoardRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        // 게시물 서비스를 통해 새로운 게시물을 생성하고 생성된 게시물을 반환
+        Board board = boardService.createBoard(requestDto, userDetails.getUser());
+        BoardResponseDto boardResponseDto = new BoardResponseDto(board);
+
+        // 생성된 게시물을 HttpStatus.CREATED 상태로 반환
+        return new ResponseEntity<>(boardResponseDto, HttpStatus.OK);
+    }
 
     @PutMapping("/{boardNum}")
     public ResponseEntity<BoardResponseDto> updateBoard(
