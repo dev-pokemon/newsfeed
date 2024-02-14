@@ -23,6 +23,12 @@ public class Board extends Timestamped {
     @JoinColumn(name = "userNum", nullable = false) // foreign key : userSeq, references User : id
     private User user; // DB는 오브젝트를 저장할 수 없다. FK, 자바는 오브젝트를 저장할 수 있다. // 참조할 데이터
 
+    public Board(String title, String content, User user) {
+        this.title = title;
+        this.contents = content;
+        this.user = user;
+    }
+
     public void updateBoard(BoardUpdateDto requestDto) {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();

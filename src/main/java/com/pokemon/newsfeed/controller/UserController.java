@@ -3,9 +3,10 @@ package com.pokemon.newsfeed.controller;
 import com.pokemon.newsfeed.dto.requestDto.LoginRequestDto;
 import com.pokemon.newsfeed.dto.requestDto.SignupRequestDto;
 import com.pokemon.newsfeed.dto.requestDto.UserUpdateDto;
+import com.pokemon.newsfeed.dto.responseDto.BoardResponseDto;
 import com.pokemon.newsfeed.dto.responseDto.LoginResponseDto;
-import com.pokemon.newsfeed.security.UserDetailsImpl;
 import com.pokemon.newsfeed.dto.responseDto.ProfileResponseDto;
+import com.pokemon.newsfeed.security.UserDetailsImpl;
 import com.pokemon.newsfeed.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,9 +30,7 @@ public class UserController {
 
     @PostMapping("/signup")
     public String signup (@Valid @RequestBody SignupRequestDto requestDto, BindingResult bindingResult) {
-        // todo: RequestBody 어노테이션 없으면 null이 들어오는 이유
-        System.out.println(requestDto);
-        // Validation 예외처리
+        // todo: RequestBody 어노테이션 없으면 null이 들어오는 이유// Validation 예외처리
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
         if (!fieldErrors.isEmpty()) {
             for (FieldError fieldError : bindingResult.getFieldErrors()) {
@@ -39,9 +38,10 @@ public class UserController {
             }
             return "회원가입도중 에러가 발생했습니다.";
         }
+        // 회원 가입도중 발생할 에러를 출력합니다.
 
-        System.out.println(requestDto);
         userService.signup(requestDto);
+        // 회원가입을 위해 입력한 정보를 서비스 클래스의 signup 메서드에 보냅니다.
 
         return "회원가입 성공";
     }
@@ -50,17 +50,19 @@ public class UserController {
     public LoginResponseDto login (@RequestBody LoginRequestDto requestDto) {
         LoginResponseDto responseDto = userService.login(requestDto);
         return responseDto;
+        /*
+        유저 id와 비밀번호를 파라미터로 받아서 서비스의 login 메서드로 넘겨줍니다.
+        서비스에서 로직이 성공적으로 구현되면 로그인 하려는 유정의 정보를 볼 수 있는 ResponseDto를 반환 받습니다.
+         */
     }
 
     // 회원 관련 정보 받기 + 강의에서 봤던 이름님 환영합니다 부분 연결 api
     @GetMapping("/info")
     @ResponseBody
-    public String getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        String userId = userDetails.getUser().getUserId();
-        String password = userDetails.getPassword();
-        System.out.println(userId + ", " + password);
+    public UserDetailsImpl getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        return "로그인 성공";
+        return userDetails;
+        // todo: 이 부분 필요할까....
     }
 
     // 프로필 단건조회
@@ -76,4 +78,6 @@ public class UserController {
         ProfileResponseDto response = userService.updateProfile(userDetails.getUser().getUserNum(), request);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+
 }

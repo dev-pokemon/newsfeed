@@ -37,6 +37,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         try {
             LoginRequestDto requestDto = new ObjectMapper()
                     .readValue(req.getInputStream(), LoginRequestDto.class);
+            // LoginRequestDto를 Controller에 보내지기 전에 여기서 받아서 사용
 
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(
