@@ -109,7 +109,7 @@ public class UserService {
     // 프로필 조회
     public ProfileResponseDto getProfile(Long userNum) {
             User user = userRepository.findById(userNum).orElseThrow(() -> new IllegalArgumentException("해당 아이디는 존재하지 않습니다."));
-            return new ProfileResponseDto(user.getName(), user.getUserId(), user.getEmail());
+            return new ProfileResponseDto(user.getName(), user.getUserId(), user.getEmail(), user.getPassword());
     }
 
     // 프로필 수정
@@ -123,8 +123,8 @@ public class UserService {
         if (!request.getPassword().equals(request.getConfirmPassword())) {
             throw new RuntimeException("패스워드가 일치하지 않습니다.");
         }
-        user.updateProfile(request.getName(), request.getUserId(), request.getEmail());
-        return new ProfileResponseDto(user.getName(), user.getUserId(), user.getEmail());
+        user.updateProfile(request.getName(), request.getUserId(), request.getEmail(), request.getPassword());
+        return new ProfileResponseDto(user.getName(), user.getUserId(), user.getEmail(), user.getPassword());
     }
 
     private User findUser(User user) {
