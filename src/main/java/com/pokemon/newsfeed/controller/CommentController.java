@@ -19,7 +19,7 @@ import java.util.List;
 public class CommentController {
     private final CommentService commentService;
 
-    @GetMapping("{boardNum}")
+    @GetMapping("/{boardNum}/comment")
     public List<CommentResponseDto> getCommentsByBoard(@PathVariable("boardNum") Long boardNum){
         return commentService.getCommentsByBoard(boardNum);
     }
