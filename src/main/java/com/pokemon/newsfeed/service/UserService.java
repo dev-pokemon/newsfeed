@@ -5,8 +5,12 @@ import com.pokemon.newsfeed.dto.requestDto.SignupRequestDto;
 import com.pokemon.newsfeed.dto.requestDto.UserUpdateDto;
 import com.pokemon.newsfeed.dto.responseDto.LoginResponseDto;
 import com.pokemon.newsfeed.dto.responseDto.ProfileResponseDto;
+import com.pokemon.newsfeed.entity.Board;
+import com.pokemon.newsfeed.entity.Comment;
 import com.pokemon.newsfeed.entity.User;
 import com.pokemon.newsfeed.entity.UserRoleEnum;
+import com.pokemon.newsfeed.repository.BoardRepository;
+import com.pokemon.newsfeed.repository.CommentRepository;
 import com.pokemon.newsfeed.repository.UserRepository;
 import com.pokemon.newsfeed.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -22,6 +27,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final BoardRepository boardRepository;
+    private final CommentRepository commentRepository;
     private final JwtUtil jwtUtil;
 
     public void signup(SignupRequestDto requestDto) {
@@ -84,19 +91,25 @@ public class UserService {
     }
 
     // 회원 탈퇴
-    public void deleteUser(Long userNum, User user) {
-        userRepository.findById(userNum).orElseThrow(() -> new IllegalArgumentException(" 계정 정보가 일치하지 않습니다."));
-        if (!user.getUserNum().equals(userNum)) {
-            throw new RuntimeException("패스워드가 일치하지 않습니다.");
+    public void deleteUser(User user) {
+        User findUser = findUser(findUser(user));
+        if(!user.getUserNum().equals(findUser.getUserNum())) {
+            throw new IllegalArgumentException("유저 정보가 일치하지 않습니다.");
         }
-        userRepository.delete(user);
-
+        List<Board> userBoards = boardRepository.findByUser(user);
+                for(Board board : userBoards) {
+                    List<Comment> boardComments = commentRepository.findByBoard(board);
+                    commentRepository.deleteAll(boardComments);
+                }
+                boardRepository.deleteAll(userBoards);
+                userRepository.delete(user);
     }
+
 
     // 프로필 조회
     public ProfileResponseDto getProfile(Long userNum) {
             User user = userRepository.findById(userNum).orElseThrow(() -> new IllegalArgumentException("해당 아이디는 존재하지 않습니다."));
-            return new ProfileResponseDto(user.getName(), user.getUserId(), user.getEmail());
+            return new ProfileResponseDto(user.getName(), user.getUserId(), user.getEmail(), user.getPassword());
     }
 
     // 프로필 수정
@@ -110,8 +123,15 @@ public class UserService {
         if (!request.getPassword().equals(request.getConfirmPassword())) {
             throw new RuntimeException("패스워드가 일치하지 않습니다.");
         }
-        user.updateProfile(request.getName(), request.getUserId(), request.getEmail());
-        return new ProfileResponseDto(user.getName(), user.getUserId(), user.getEmail());
+
+        String changedPassword = passwordEncoder.encode(request.getPassword());
+
+        user.updateProfile(request.getName(), request.getUserId(), request.getEmail(), changedPassword);
+        return new ProfileResponseDto(user.getName(), user.getUserId(), user.getEmail(), changedPassword);
+    }
+
+    private User findUser(User user) {
+        return userRepository.findById(user.getUserNum()).orElseThrow(() -> new IllegalArgumentException("없는 사용자입니다."));
     }
 
 }
