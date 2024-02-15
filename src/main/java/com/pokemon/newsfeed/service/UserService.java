@@ -123,8 +123,11 @@ public class UserService {
         if (!request.getPassword().equals(request.getConfirmPassword())) {
             throw new RuntimeException("패스워드가 일치하지 않습니다.");
         }
-        user.updateProfile(request.getName(), request.getUserId(), request.getEmail(), request.getPassword());
-        return new ProfileResponseDto(user.getName(), user.getUserId(), user.getEmail(), user.getPassword());
+
+        String changedPassword = passwordEncoder.encode(request.getPassword());
+
+        user.updateProfile(request.getName(), request.getUserId(), request.getEmail(), changedPassword);
+        return new ProfileResponseDto(user.getName(), user.getUserId(), user.getEmail(), changedPassword);
     }
 
     private User findUser(User user) {
