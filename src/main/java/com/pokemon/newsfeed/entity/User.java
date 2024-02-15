@@ -40,9 +40,11 @@ public class User extends Timestamped {
         return Objects.equals(getUserNum(), user.getUserNum()) && Objects.equals(getUserId(), user.getUserId());
     }
 
-    public void updateProfile(String name, String userId, String email) {
+    public void updateProfile(String name, String userId, String email, String password) {
         this.name = name;
         this.userId = userId;
         this.email = email;
+        this.password = password;
+
     }
 }
