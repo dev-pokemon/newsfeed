@@ -53,6 +53,7 @@ public class memo {
      답은 유튜브
      쿨라우드 ( = 남의 콤퓨타 빌려 쓰는 개념)
 
+
     equals와 matches 중에 equals 사용
     입력값 무조건 암호화해서 비교
     GlobalExceptionHandler 사용 controllerAdvice 찾아보기
