@@ -3,7 +3,7 @@
 
 ## 개발환경
 - Language - Java 17
-- Spring Boot - 3.2.x version
+- Spring Boot - 3.2.2 version
 - IDE - IntelliJ
 - DataBase - MySQL
 - Project - Gradle(groovy)
