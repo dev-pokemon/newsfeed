@@ -1,5 +1,5 @@
 package com.pokemon.newsfeed.dto.responseDto;
-
+//추가입니다....
 import com.pokemon.newsfeed.entity.Board;
 import lombok.Getter;
 import lombok.Setter;
